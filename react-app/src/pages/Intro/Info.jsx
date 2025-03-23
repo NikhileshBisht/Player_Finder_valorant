@@ -5,19 +5,27 @@ import axios from "axios";
 
 const FormTemplate = () => {
   const [formData, setFormData] = useState({
-    inviteCode: "",
+    code: "",  
     rank: "",
   });
+  
 
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
   const [ismain, setIsmain] = useState(false);
 
-  const InviteCodePost = (data) => {
-    axios.post("http://127.0.0.1:8000/submit_code", data)
-      .then((response) => console.log(response.data))
-      .catch((error) => console.error("Error posting data:", error));
+  const InviteCodePost = async (data) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/submit_code", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Error posting data:", error);
+    }
   };
   
 
@@ -47,15 +55,11 @@ const FormTemplate = () => {
     e.preventDefault();
     if (isFormValid) {
       setResponseMessage("Form submitted successfully!");
-      console.log(`this is form datata`,formData);
       InviteCodePost(formData);
-      setFormData({ code: "", rank: "" });
-      setIsFormValid(false);
+      setFormData({ code: "", rank: "" }); // Ensure state resets correctly
     } else {
       setResponseMessage("Please fill out all required fields correctly.");
     }
-    setIsmain(true);
-    console.log("form data is here",formData)
   };
 
   return (
