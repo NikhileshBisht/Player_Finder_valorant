@@ -1,6 +1,7 @@
 // FormTemplate.jsx
 import React, { useState } from "react";
 import styles from "./Info.module.scss";
+import axios from "axios";
 
 const FormTemplate = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,13 @@ const FormTemplate = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
   const [ismain, setIsmain] = useState(false);
+
+  const InviteCodePost = (data) => {
+    axios.post("http://127.0.0.1:8000/submit_code", data)
+      .then((response) => console.log(response.data))
+      .catch((error) => console.error("Error posting data:", error));
+  };
+  
 
   // Handle input changes
   const handleChange = (e) => {
@@ -39,7 +47,9 @@ const FormTemplate = () => {
     e.preventDefault();
     if (isFormValid) {
       setResponseMessage("Form submitted successfully!");
-      setFormData({ inviteCode: "", rank: "" });
+      console.log(`this is form datata`,formData);
+      InviteCodePost(formData);
+      setFormData({ code: "", rank: "" });
       setIsFormValid(false);
     } else {
       setResponseMessage("Please fill out all required fields correctly.");
