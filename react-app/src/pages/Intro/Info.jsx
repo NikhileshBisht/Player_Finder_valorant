@@ -1,4 +1,3 @@
-// FormTemplate.jsx
 import React, { useState } from "react";
 import styles from "./Info.module.scss";
 import axios from "axios";
@@ -8,7 +7,6 @@ const FormTemplate = () => {
     code: "",  
     rank: "",
   });
-  
 
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
@@ -22,44 +20,46 @@ const FormTemplate = () => {
           "Content-Type": "application/json",
         },
       });
+      setResponseMessage("Form submitted successfully!");
       console.log("Response:", response.data);
     } catch (error) {
+      setResponseMessage("Error submitting form. Please try again.");
       console.error("Error posting data:", error);
     }
   };
-  
 
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
     validate({ ...formData, [name]: value });
   };
 
   // Validate the form
   const validate = (updatedFormData) => {
     let formErrors = {};
-    if (!updatedFormData.inviteCode)
-      formErrors.inviteCode = "Invite code is required.";
+    if (!updatedFormData.code) formErrors.code = "Invite code is required.";
+    if (!updatedFormData.rank) formErrors.rank = "Rank is required.";
 
-    const isValid = updatedFormData.inviteCode && updatedFormData.rank;
-    setIsFormValid(isValid);
     setErrors(formErrors);
+    setIsFormValid(Object.keys(formErrors).length === 0);
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isFormValid) {
-      setResponseMessage("Form submitted successfully!");
-      InviteCodePost(formData);
-      setFormData({ code: "", rank: "" }); // Ensure state resets correctly
+      console.log(formData)
+      await InviteCodePost(formData);
+      setFormData({ code: "", rank: "" });
+      setIsFormValid(false);
     } else {
       setResponseMessage("Please fill out all required fields correctly.");
     }
+    setIsmain(true);
   };
 
   return (
@@ -71,20 +71,18 @@ const FormTemplate = () => {
           <h2>Basic Info</h2>
           <form onSubmit={handleSubmit} noValidate>
             <div className={styles.fieldContainer}>
-              <label htmlFor="inviteCode" className={styles.label}>
+              <label htmlFor="code" className={styles.label}>
                 Invite Code:
               </label>
               <input
                 type="text"
-                id="inviteCode"
-                name="inviteCode"
-                value={formData.inviteCode}
+                id="code"
+                name="code"
+                value={formData.code}
                 onChange={handleChange}
                 className={styles.input}
               />
-              {errors.inviteCode && (
-                <div className={styles.error}>{errors.inviteCode}</div>
-              )}
+              {errors.code && <div className={styles.error}>{errors.code}</div>}
             </div>
 
             <div className={styles.fieldContainer}>
@@ -105,6 +103,7 @@ const FormTemplate = () => {
                 <option value="platinum">Platinum</option>
                 <option value="diamond">Diamond</option>
               </select>
+              {errors.rank && <div className={styles.error}>{errors.rank}</div>}
             </div>
 
             <button
