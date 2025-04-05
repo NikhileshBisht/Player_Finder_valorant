@@ -6,6 +6,7 @@ const FormTemplate = () => {
   const [formData, setFormData] = useState({
     code: "",  
     rank: "",
+    click: 5,
   });
 
   const [errors, setErrors] = useState({});
