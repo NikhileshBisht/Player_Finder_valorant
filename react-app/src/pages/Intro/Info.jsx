@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Info.module.scss";
+import Team from "./Team";
 import axios from "axios";
 
 const FormTemplate = () => {
@@ -66,7 +67,7 @@ const FormTemplate = () => {
   return (
     <>
       {ismain ? (
-        <div></div>
+        <Team/>
       ) : (
         <div className={styles.formContainer}>
           <h2>Basic Info</h2>
