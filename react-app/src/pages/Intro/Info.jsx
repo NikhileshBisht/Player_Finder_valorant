@@ -15,20 +15,24 @@ const FormTemplate = () => {
   const [responseMessage, setResponseMessage] = useState("");
   const [ismain, setIsmain] = useState(false);
 
-  const InviteCodePost = async (data) => {
-    try {
-      const response = await axios.post("http://127.0.0.1:8000/submit_code", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      setResponseMessage("Form submitted successfully!");
-      console.log("Response:", response.data);
-    } catch (error) {
-      setResponseMessage("Error submitting form. Please try again.");
-      console.error("Error posting data:", error);
-    }
-  };
+ const InviteCodePost = async (data) => {
+  try {
+    const token = localStorage.getItem("token"); // Get the JWT from storage
+
+    const response = await axios.post("http://127.0.0.1:8000/submit_code", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Add this line
+      },
+    });
+
+    setResponseMessage("Form submitted successfully!");
+    console.log("Response:", response.data);
+  } catch (error) {
+    setResponseMessage("Error submitting form. Please try again.");
+    console.error("Error posting data:", error.response?.data || error);
+  }
+};
 
   // Handle input changes
   const handleChange = (e) => {

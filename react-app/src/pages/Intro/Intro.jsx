@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import back from "../../material/intro.mp4";
 import styles from "./Intro.module.scss";
 import Info from "./Info"
 import Team from './Team'
 import axios from 'axios';
+import { setName } from '../redux/slice';
+import { useDispatch } from 'react-redux';
 
 const Intro = () => {
   const [isStart, setIsStart] = useState(false);
@@ -11,6 +13,7 @@ const Intro = () => {
   const [isPlayer, setIsPlayer] = useState(false);
   const [isinfo, setIsinfo] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const dispatch = useDispatch();
   const [loginData, setLoginData] = useState({
     username: "",
     password: ""

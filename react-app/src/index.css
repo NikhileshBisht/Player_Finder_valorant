@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.p-datatable .p-column-header-content{
+  font-size: 18px !important;
+  justify-content: space-around !important;
+}
